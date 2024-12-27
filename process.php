@@ -1,31 +1,38 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Ambil data dari form
     $name = htmlspecialchars($_POST['name']);
     $email = htmlspecialchars($_POST['email']);
-    $phone = htmlspecialchars($_POST['phone']);
-    $message = htmlspecialchars($_POST['message']);
+    $address = htmlspecialchars($_POST['address']);
 
-    // Email tujuan (ganti dengan email Anda)
-    $to = "everydaykahf3@gmail.com"; // Ganti dengan email Anda
-    $subject = "Pendaftaran Baru dari $name";
+    $message = "Checkout Details:\n";
+    $message .= "Name: $name\n";
+    $message .= "Email: $email\n";
+    $message .= "Address: $address\n";
 
-    // Format email
-    $body = "Nama: $name\n";
-    $body .= "Email: $email\n";
-    $body .= "Nomor Telepon: $phone\n";
-    $body .= "Pesan: $message\n";
+    $telegramToken = "7595198672:AAGHr15kpkev7Hlw7ehhKo96shzOT2WS2lM";
+    $chatId = "Copaymentnowbot"; // Ganti dengan ID chat Anda
 
-    $headers = "From: $email\r\n";
-    $headers .= "Reply-To: $email\r\n";
+    $url = "https://api.telegram.org/bot$telegramToken/sendMessage";
 
-    // Kirim email
-    if (mail($to, $subject, $body, $headers)) {
-        echo "Pendaftaran berhasil! Kami telah menerima data Anda.";
+    $data = [
+        'chat_id' => $chatId,
+        'text' => $message,
+    ];
+
+    $options = [
+        'http' => [
+            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  => 'POST',
+            'content' => http_build_query($data),
+        ],
+    ];
+
+    $context = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+
+    if ($result) {
+        echo "Message sent";
     } else {
-        echo "Maaf, terjadi kesalahan. Coba lagi nanti.";
+        echo "Failed to send message";
     }
-} else {
-    echo "Metode pengiriman tidak valid.";
 }
-?>
